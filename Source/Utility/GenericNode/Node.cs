@@ -4,7 +4,14 @@ using System.Text;
 
 namespace Source.Utility.GenericNode
 {
-    internal class node
+    public class Node<T>
     {
+        public T value { get; set; }
+
+        public Node(T var)
+        {
+            value = var;
+        }
+
     }
 }
