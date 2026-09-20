@@ -6,10 +6,10 @@ using Source.Utility.GenericNode;
 
 namespace UnitTesting.TNode
 {
-    public class Program
+    public class NodeTests
     {
         [Fact]
-        public static void CreateGenericNode()
+        public void CreateGenericNode()
         {
             Node<int> node1 = new Node<int>(5);
             Node<string> node2 = new Node<string>("Test");
@@ -17,6 +17,11 @@ namespace UnitTesting.TNode
             node2.value = "cat";
         }
 
+        [Fact]
+        public void Test()
+        {
+
+        }
         
     }
 }
