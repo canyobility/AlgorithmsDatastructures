@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Source.Utility
+namespace Source.Utility.GenericNode
 {
     internal class connection
     {
