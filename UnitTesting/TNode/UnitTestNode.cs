@@ -9,6 +9,15 @@ using Shouldly;
 
 namespace UnitTesting.TNode
 {
+    // Expose protected fields for testing
+    class TestNode<T> : Node<T>
+    { 
+        public NodeSocket<T>? TestGetEmptySocket()
+            {   return this.GetEmptySocket();   }
+        
+    }
+
+
     public class NodeTests
     {
         [Fact]
@@ -33,5 +42,23 @@ namespace UnitTesting.TNode
 
             node1.GetAtSocket(0).Target.ShouldBe(node2);
         }
+
+        [Fact]
+        public void GetEmptySocket()
+        {
+            TestNode<string> testNode1 = new TestNode<string>();
+            TestNode<string> testNode2 = new TestNode<string>();
+            TestNode<string> testNode3 = new TestNode<string>();
+
+            testNode1.AddSocket(); // 0
+            testNode1.AddSocket(); // 1
+            NodeSocket<string> socket = testNode1.AddSocket(); // 2
+
+            testNode1.Connect(testNode2); // Should use socket 0
+            testNode1.Connect(testNode3); // Should use socket 1
+
+            testNode1.TestGetEmptySocket().ShouldBe(socket);
+        }
+
     }
 }
