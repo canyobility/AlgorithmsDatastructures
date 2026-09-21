@@ -13,8 +13,7 @@ namespace UnitTesting.TNode
     class TestNode<T> : Node<T>
     { 
         public NodeSocket<T>? TestGetEmptySocket()
-            {   return this.GetEmptySocket();   }
-        
+        { return this.GetEmptySocket(); }
     }
 
 
@@ -27,8 +26,6 @@ namespace UnitTesting.TNode
             Node<string> node2 = new Node<string>();
             node1.value = 1;
             node2.value = "cat";
-
-            
         }
 
         [Fact]
@@ -60,5 +57,19 @@ namespace UnitTesting.TNode
             testNode1.TestGetEmptySocket().ShouldBe(socket);
         }
 
+        [Fact]
+        public void IndexNodeSockets()
+        {
+            TestNode<string> testNode1 = new TestNode<string>();
+            TestNode<string> testNode2 = new TestNode<string>();
+
+            testNode1.AddSocket(); // 0th port
+            testNode1.AddSocket();
+            testNode1.AddSocket();
+
+            testNode1.Connect(testNode2);
+            testNode1[0].isConnected.ShouldBeTrue();
+            testNode1[0].Value!.Target.ShouldBe(testNode2);
+        }
     }
 }
