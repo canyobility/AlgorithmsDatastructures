@@ -29,13 +29,24 @@ namespace Source.Utility.GenericNode
         {   }
 
 
-        public NodeSocket<T> AddSocket() 
+        public NodeSocket<T> AddSocket(int Id) 
         { 
             NodeSocket<T> socket = new NodeSocket<T>();
-            socket.ID = sockets.Count;
+            socket.ID = Id;
             sockets.Add(socket);
             return socket;
         }
+
+        /// <summary>
+        /// <para>Overload of the AddSocket method which attempts to find a new ID to give
+        /// your port automatically.</para>
+        /// <para>Recomend assigning your ports manually to prevent
+        /// unessessary computations. This is mainly offered for backwards compatability
+        /// from my previous code.</para>
+        /// </summary>
+        /// <returns></returns>
+        public NodeSocket<T> AddSocket() => AddSocket(this.GetAutomatedId());
+
 
         /// <summary>
         /// Used to connect to another node. 
@@ -43,19 +54,21 @@ namespace Source.Utility.GenericNode
         /// <param name="targetNode"></param>
         /// <param name="weight"></param>
         /// <returns></returns>
-        public NodeConnection<T> Connect(Node<T> targetNode, int weight = 1)
+        public NodeConnection<T> Connect(Node<T> targetNode, int portId, int weight = 1)
         {
-            // Find avalable socket
-            NodeSocket<T> targetSocket = this.GetEmptySocket();
+            NodeSocket<T> targetSocket;
+            
+            targetSocket = this.GetEmptySocket();
+            portId = targetSocket.ID;
 
-            NodeConnection<T> connection = new NodeConnection<T>();
-            connection.Target = targetNode;
-
-            targetSocket.Connection = connection;
-            connection.Weight = weight;
-
-            return connection;
+            targetSocket.Link(targetNode, portId, weight);
+            return targetSocket.Connection;
+            
         }
+
+
+        public NodeConnection<T> Connect(Node<T> targetNode, int weight = 1) => this.Connect(targetNode, this.GetAutomatedId(), weight);
+
 
         /// <summary>
         /// <para>Doubly links the current node to the target node by creating two connection instances.</para>
@@ -90,7 +103,7 @@ namespace Source.Utility.GenericNode
             return this.sockets[ID];
         }
         public NodeConnection<T> GetAtSocket(int ID)
-        { return this.GetAtSocket(ID); }
+        { return this.GetSocket(ID).Connection; }
 
 
         /// <summary>
@@ -117,6 +130,21 @@ namespace Source.Utility.GenericNode
                 yield return socket;
             }
         }
+
+
+        #region Private helpers
+
+        // TODO: Might be fun to add my own stack implimentation in the future. 
+        // Also note that this is an expensive operation.
+        private int GetAutomatedId()
+        {
+            List<int> storedIds = new List<int>();
+            foreach (NodeSocket<T> current in this)
+            { storedIds.Add(current.ID); }
+
+            return (storedIds.Count == 0) ? 0 : storedIds.Count + 1;
+        }
+        #endregion
 
     }
 }

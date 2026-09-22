@@ -21,5 +21,15 @@ namespace Source.Utility.GenericNode
                 return this.Connection!.Target;
             }
         }
+
+
+        public void Link(Node<T> targetNode, int portId, int weight = 1)
+        {
+            NodeConnection<T> connection = new NodeConnection<T>();
+            connection.Target = targetNode;
+
+            this.Connection = connection;
+            connection.Weight = weight;
+        }
     }
 }

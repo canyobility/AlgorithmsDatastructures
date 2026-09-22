@@ -96,11 +96,12 @@ namespace UnitTesting.TNode
             TestNode<string> testNode2 = new TestNode<string>();
             NodeSocket<string> socket = testNode1.AddSocket(Id: 5); // Port 5
             testNode1.AddSocket(); // Add at index 1, Id 0
-            testNode1.Connect(testNode2, null, 5);
+            testNode1.Connect(targetNode: testNode2,
+                              portId: 1);
 
             testNode1[1].isConnected.ShouldBeFalse();
             testNode1[0].isConnected.ShouldBeTrue();
-            testNode1[0].Target.ShouldBe(testNode2) ;
+            testNode1[0].Target.ShouldBe(testNode2);
         }
     }
 }
