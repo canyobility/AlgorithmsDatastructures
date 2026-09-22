@@ -51,7 +51,7 @@ namespace Source.Utility.GenericNode
             NodeConnection<T> connection = new NodeConnection<T>();
             connection.Target = targetNode;
 
-            targetSocket.Value = connection;
+            targetSocket.Connection = connection;
             connection.Weight = weight;
 
             return connection;
@@ -101,7 +101,7 @@ namespace Source.Utility.GenericNode
         {
             foreach (NodeSocket<T> socket in this)
             {
-                if (socket.Value is null)
+                if (socket.Connection is null)
                 {
                     return socket;
                 }

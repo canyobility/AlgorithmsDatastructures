@@ -69,7 +69,38 @@ namespace UnitTesting.TNode
 
             testNode1.Connect(testNode2);
             testNode1[0].isConnected.ShouldBeTrue();
-            testNode1[0].Value!.Target.ShouldBe(testNode2);
+            testNode1[0].Connection!.Target.ShouldBe(testNode2);
+        }
+
+
+        [Fact]
+        public void NodeSocketShorthand()
+        {
+            TestNode<string> testNode1 = new TestNode<string>();
+            TestNode<string> testNode2 = new TestNode<string>();
+            testNode1.AddSocket(); // Port 0
+            testNode1.AddSocket(); // Port 1
+            testNode1.Connect(testNode2); // Connect to Port 0
+
+            testNode1[0].Target.ShouldBe(testNode2);
+            testNode1[0].isConnected.ShouldBeTrue();
+
+            testNode1[1].Target.ShouldBeNull();
+            testNode1[0].isConnected.ShouldBeTrue();
+        }
+
+        [Fact]
+        public void SelectSocketById()
+        {
+            TestNode<string> testNode1 = new TestNode<string>();
+            TestNode<string> testNode2 = new TestNode<string>();
+            NodeSocket<string> socket = testNode1.AddSocket(Id: 5); // Port 5
+            testNode1.AddSocket(); // Add at index 1, Id 0
+            testNode1.Connect(testNode2, null, 5);
+
+            testNode1[1].isConnected.ShouldBeFalse();
+            testNode1[0].isConnected.ShouldBeTrue();
+            testNode1[0].Target.ShouldBe(testNode2) ;
         }
     }
 }
